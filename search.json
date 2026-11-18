@@ -1,0 +1,177 @@
+[
+  {
+    "objectID": "patterns-cancellations.html",
+    "href": "patterns-cancellations.html",
+    "title": "Flight Patterns & Cancellations",
+    "section": "",
+    "text": "Figure 1: Total non-cancelled flights by weekday in December 2024. Orange highlights the largest total.\n\n\n\n\n\nSunday had the most non-cancelled flights (101,691), while Wednesday had the fewest (69,220). These are monthly totals; weekdays occur different numbers of times in December."
+  },
+  {
+    "objectID": "patterns-cancellations.html#q3-flight-activity-by-weekday",
+    "href": "patterns-cancellations.html#q3-flight-activity-by-weekday",
+    "title": "Flight Patterns & Cancellations",
+    "section": "",
+    "text": "Figure 1: Total non-cancelled flights by weekday in December 2024. Orange highlights the largest total.\n\n\n\n\n\nSunday had the most non-cancelled flights (101,691), while Wednesday had the fewest (69,220). These are monthly totals; weekdays occur different numbers of times in December."
+  },
+  {
+    "objectID": "patterns-cancellations.html#q6-cancellations-and-their-causes",
+    "href": "patterns-cancellations.html#q6-cancellations-and-their-causes",
+    "title": "Flight Patterns & Cancellations",
+    "section": "Q6: Cancellations and Their Causes",
+    "text": "Q6: Cancellations and Their Causes\n\n\n4,151 flights were cancelled in December 2024.\n\n\n\n\n\n\n\n\n\n\nFigure 2: Ten airport–reason results with the largest cancellation counts, from Q6b.\n\n\n\n\n\nThe chart shows each listed airport’s most common cancellation reason, not its total cancellations across all reasons."
+  },
+  {
+    "objectID": "patterns-cancellations.html#q7-daily-flights-and-three-day-moving-average",
+    "href": "patterns-cancellations.html#q7-daily-flights-and-three-day-moving-average",
+    "title": "Flight Patterns & Cancellations",
+    "section": "Q7: Daily Flights and Three-Day Moving Average",
+    "text": "Q7: Daily Flights and Three-Day Moving Average\n\n\n\n\n\n\n\n\nFigure 3: Daily non-cancelled flights and their three-day moving average.\n\n\n\n\n\nThe three-day moving average smooths daily changes in flight activity. The first two dates use only the available days at the start of December. Flight counts dropped sharply on December 24–25 and rose again on December 26. The three-day moving average makes these daily changes smoother."
+  },
+  {
+    "objectID": "methods.html",
+    "href": "methods.html",
+    "title": "Data & Methods",
+    "section": "",
+    "text": "For this project, I used the December 2024 flight dataset. Each row represents one reported flight.\nAfter importing the data, I used SQL to check the number of records and the date range.\nThe database contains:\n\n590,581 flight records.\nDates from December 1 to December 31, 2024.\n586,430 non-cancelled flights.\n4,151 cancelled flights.\n\nI also used the provided lookup tables to match airline IDs, airport codes, weekdays, and cancellation codes with their names."
+  },
+  {
+    "objectID": "methods.html#about-the-data",
+    "href": "methods.html#about-the-data",
+    "title": "Data & Methods",
+    "section": "",
+    "text": "For this project, I used the December 2024 flight dataset. Each row represents one reported flight.\nAfter importing the data, I used SQL to check the number of records and the date range.\nThe database contains:\n\n590,581 flight records.\nDates from December 1 to December 31, 2024.\n586,430 non-cancelled flights.\n4,151 cancelled flights.\n\nI also used the provided lookup tables to match airline IDs, airport codes, weekdays, and cancellation codes with their names."
+  },
+  {
+    "objectID": "methods.html#how-i-loaded-the-data",
+    "href": "methods.html#how-i-loaded-the-data",
+    "title": "Data & Methods",
+    "section": "How I Loaded the Data",
+    "text": "How I Loaded the Data\nI created a MySQL database on Amazon RDS and named the schema FAA.\nFirst, I used the provided CreateFactTable.sql file to create the al_perf table. Then, I used an EC2 instance and mysqlimport to load the flight CSV into the database.\nI imported the lookup tables through MySQL Workbench. I then ran SQL queries in MySQL Workbench and exported the results as CSV files.\nThe import reported 590,581 records, with no skipped or deleted records. It also reported 58,597 warnings. These warnings made me check the imported data more closely."
+  },
+  {
+    "objectID": "methods.html#what-i-checked",
+    "href": "methods.html#what-i-checked",
+    "title": "Data & Methods",
+    "section": "What I Checked",
+    "text": "What I Checked\n\nRow Count and Dates\nI used SQL to count the records in al_perf and check their dates.\nThe table contained 590,581 records, which matched the number reported by the import tool. All records were from December 2024. The earliest date was December 1, and the latest was December 31.\n\n\nDeparture Delay Values\nI used SQL to count NULL, zero, negative, and positive values in the DepDelay column.\n\n\n\nDeparture delay in the database\nNumber of records\n\n\n\n\nNULL\n0\n\n\nZero\n31,305\n\n\nNegative: departed early\n324,944\n\n\nPositive: departed late\n234,332\n\n\n\nThe database showed no NULL departure delays. However, this alone does not show whether the original file had missing values.\n\n\nCancelled Flights and Zero Delays\nI also grouped the records by cancellation status and counted how many flights had a departure delay of zero.\n\n\n\nFlight status\nTotal records\nRecords with zero departure delay\n\n\n\n\nNot cancelled\n586,430\n27,383\n\n\nCancelled\n4,151\n3,922\n\n\n\nMany cancelled flights had a departure delay of zero. This made me question whether every zero meant an on-time departure.\nBecause the import produced warnings, I suspected that some missing values might have become zeros during import. However, my SQL checks alone could not confirm this explanation or show how many values might have been affected.\nI kept the stored values unchanged. I did not replace all zeros with NULL because zero can also be a valid departure delay."
+  },
+  {
+    "objectID": "methods.html#how-i-defined-the-analysis",
+    "href": "methods.html#how-i-defined-the-analysis",
+    "title": "Data & Methods",
+    "section": "How I Defined the Analysis",
+    "text": "How I Defined the Analysis\nI used the following rules in my SQL queries.\n\n\n\n\n\n\n\nQuestion\nWhat I calculated\n\n\n\n\nQ1\nThe largest departure delay for each airline, sorted from smallest to largest.\n\n\nQ2\nThe greatest number of minutes early for each airline, with airline names listed from largest to smallest early departure.\n\n\nQ3\nThe number of non-cancelled flights for each weekday, ranked from busiest to least busy.\n\n\nQ4\nThe airport with the highest average departure delay, using non-cancelled flights and treating early departures as zero delay.\n\n\nQ5\nFor each airline, the airport with its highest average departure delay, using the same rules as Q4.\n\n\nQ6\nThe number of cancelled flights and the most common cancellation reason at each departure airport.\n\n\nQ7\nThe average daily flight count over the current day and the previous two days, using non-cancelled flights.\n\n\n\nFor Q1 and Q2, I used the departure delay values stored in the database. Q2 only considered negative departure delays.\nFor Q3–Q5 and Q7, I chose to exclude cancelled flights. This keeps the flight counts and delay comparisons focused on non-cancelled flights.\nFor Q4, the question requires early departures to count as zero delay. For Q5, I chose to use the same rule so that the two average-delay analyses use a consistent definition.\nThese choices are part of my analysis and are stated here to make the results easier to understand.\n\nHow I Handled Ties\nFor Q3, weekdays with the same flight count receive the same rank. The next rank may skip a number.\nFor Q4, the query returns one airport. If average delays tie, airport code determines which airport is selected.\nFor Q5, the query returns one airport per airline. If two airports share the highest average delay, airport code determines which one is selected.\nFor Q6, I keep all cancellation reasons tied for the highest count at an airport. Therefore, an airport may appear more than once in the results.\n\n\nHow the Three-Day Average Works\nFor Q7, I first counted non-cancelled flights for each date. Then I calculated a moving average.\nFor example, the December 3 average uses the flight counts from December 1, 2, and 3.\nThe beginning of the month has fewer available days:\n\nDecember 1 uses only December 1.\nDecember 2 uses December 1 and 2.\nDecember 3 onward uses the current day and the previous two days.\n\nThe daily query results include all 31 days of December, so each three-row window represents three consecutive dates."
+  },
+  {
+    "objectID": "methods.html#things-to-keep-in-mind",
+    "href": "methods.html#things-to-keep-in-mind",
+    "title": "Data & Methods",
+    "section": "Things to Keep in Mind",
+    "text": "Things to Keep in Mind\n\nThe results describe December 2024 in this dataset. Other months may show different patterns.\nA maximum delay describes an extreme event, not an airline’s usual performance.\nAn airport with only a few flights can have a high average because of one or two long delays.\nSome weekdays occur more often than others in December. This affects total flight counts by weekday.\nA non-cancelled flight may still have been diverted.\nThe import warnings were not fully investigated. The SQL checks describe the stored data, but they do not prove that every source value was preserved correctly during import."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "December 2024 U.S. Flight Performance",
+    "section": "",
+    "text": "This project examines U.S. flight performance in December 2024, focusing on departure delays, early departures, flight activity, and cancellations.\nThe analysis uses SQL to summarize flight records and combines the results with visualizations to explain patterns across airlines, airports, and dates."
+  },
+  {
+    "objectID": "index.html#project-overview",
+    "href": "index.html#project-overview",
+    "title": "December 2024 U.S. Flight Performance",
+    "section": "",
+    "text": "This project examines U.S. flight performance in December 2024, focusing on departure delays, early departures, flight activity, and cancellations.\nThe analysis uses SQL to summarize flight records and combines the results with visualizations to explain patterns across airlines, airports, and dates."
+  },
+  {
+    "objectID": "index.html#dataset-at-a-glance",
+    "href": "index.html#dataset-at-a-glance",
+    "title": "December 2024 U.S. Flight Performance",
+    "section": "Dataset at a Glance",
+    "text": "Dataset at a Glance\n\n\n\nMeasure\nValue\n\n\n\n\nReporting period\nDecember 1–31, 2024\n\n\nTotal flight records\n590,581\n\n\nNon-cancelled flights\n586,430\n\n\nCancelled flights\n4,151"
+  },
+  {
+    "objectID": "index.html#research-questions",
+    "href": "index.html#research-questions",
+    "title": "December 2024 U.S. Flight Performance",
+    "section": "Research Questions",
+    "text": "Research Questions\n\nHow do maximum departure delays and early departures differ across airlines?\nWhich weekdays have the most non-cancelled flights?\nWhich airports have the highest average departure delays?\nWhat are the most frequent cancellation reasons at each departure airport?\nHow does daily flight activity change throughout the month?"
+  },
+  {
+    "objectID": "index.html#about-this-report",
+    "href": "index.html#about-this-report",
+    "title": "December 2024 U.S. Flight Performance",
+    "section": "About This Report",
+    "text": "About This Report\nPrepared for the DSAN 6300 Mini Project.\nThe report will present the data preparation process, SQL results, visualizations, and limitations of the analysis."
+  },
+  {
+    "objectID": "airlines-airports.html",
+    "href": "airlines-airports.html",
+    "title": "Airlines & Airports",
+    "section": "",
+    "text": "I used SQL to find the largest departure delay for each airline. The chart below shows the results in minutes.\n\n\n\n\n\n\n\n\nFigure 1: Maximum departure delay by airline, December 2024."
+  },
+  {
+    "objectID": "airlines-airports.html#q1-maximum-departure-delays",
+    "href": "airlines-airports.html#q1-maximum-departure-delays",
+    "title": "Airlines & Airports",
+    "section": "",
+    "text": "I used SQL to find the largest departure delay for each airline. The chart below shows the results in minutes.\n\n\n\n\n\n\n\n\nFigure 1: Maximum departure delay by airline, December 2024."
+  },
+  {
+    "objectID": "airlines-airports.html#q2-maximum-early-departures",
+    "href": "airlines-airports.html#q2-maximum-early-departures",
+    "title": "Airlines & Airports",
+    "section": "Q2: Maximum Early Departures",
+    "text": "Q2: Maximum Early Departures\nI used SQL to find the greatest number of minutes early for each airline. The query lists airlines from the largest early departure to the smallest.\nThe exported result contains airline names only. The table below keeps the order returned by the SQL query.\n\n\n\n\n\nPosition in query result\nAirline\n\n\n\n\n1\nDelta Air Lines Inc.: DL\n\n\n2\nAlaska Airlines Inc.: AS\n\n\n3\nAllegiant Air: G4\n\n\n4\nJetBlue Airways: B6\n\n\n5\nPSA Airlines Inc.: OH\n\n\n6\nFrontier Airlines Inc.: F9\n\n\n7\nUnited Air Lines Inc.: UA\n\n\n8\nAmerican Airlines Inc.: AA\n\n\n9\nSkyWest Airlines Inc.: OO\n\n\n10\nEndeavor Air Inc.: 9E\n\n\n11\nSpirit Air Lines: NK\n\n\n12\nEnvoy Air: MQ\n\n\n13\nRepublic Airline: YX\n\n\n14\nHawaiian Airlines Inc.: HA\n\n\n15\nSouthwest Airlines Co.: WN\n\n\n\n\n\nThe position shows the order in the exported result. It does not show how many minutes early each airline departed, and airlines with the same value may appear in separate positions.\nThis result describes each airline’s earliest departure. It does not show how often that airline departed early."
+  },
+  {
+    "objectID": "airlines-airports.html#q4-airport-with-the-highest-average-departure-delay",
+    "href": "airlines-airports.html#q4-airport-with-the-highest-average-departure-delay",
+    "title": "Airlines & Airports",
+    "section": "Q4: Airport with the Highest Average Departure Delay",
+    "text": "Q4: Airport with the Highest Average Departure Delay\nI calculated the average departure delay for each airport using non-cancelled flights. Following the question, I treated early departures as zero delay.\nThe query returns the airport with the highest average.\n\n\n\n\n\n\n\n\n\n\nAirport\nCode\nAverage departure delay (minutes)\n\n\n\n\nHagerstown, MD: Hagerstown Regional-Richard A. Henson Field\nHGR\n107.38\n\n\n\n\n\nThis average describes the non-cancelled flights at the airport during December 2024. It does not mean every flight had this delay. Airport flight counts would also help explain the comparison, because averages based on fewer flights can be more sensitive to individual long delays."
+  },
+  {
+    "objectID": "airlines-airports.html#q5-highest-delay-airport-for-each-airline",
+    "href": "airlines-airports.html#q5-highest-delay-airport-for-each-airline",
+    "title": "Airlines & Airports",
+    "section": "Q5: Highest-Delay Airport for Each Airline",
+    "text": "Q5: Highest-Delay Airport for Each Airline\nFor each airline, I compared its average departure delay across departure airports and selected the airport with the highest average.\nI used non-cancelled flights and counted early departures as zero delay, following the same approach as Q4.\n\n\n\n\n\n\n\n\nFigure 2: Highest airport-level average departure delay for each airline. Orange highlights the largest value shown.\n\n\n\n\n\nEach bar represents one airline at its selected airport. It is not the airline’s average delay across all airports. The chart uses city names for shorter labels; the full airport names are listed below.\n\n\n\n\n\n\n\n\n\n\nAirline\nAirport\nAverage delay (minutes)\n\n\n\n\nSouthwest Airlines Co.: WN\nCorpus Christi, TX: Corpus Christi International\n27.33\n\n\nHawaiian Airlines Inc.: HA\nSacramento, CA: Sacramento International\n31.60\n\n\nSpirit Air Lines: NK\nLouisville, KY: Louisville Muhammad Ali International\n33.74\n\n\nAlaska Airlines Inc.: AS\nTampa, FL: Tampa International\n41.82\n\n\nEnvoy Air: MQ\nMarquette, MI: Sawyer International\n62.30\n\n\nDelta Air Lines Inc.: DL\nPasco/Kennewick/Richland, WA: Tri Cities\n67.13\n\n\nFrontier Airlines Inc.: F9\nPittsburgh, PA: Pittsburgh International\n76.57\n\n\nUnited Air Lines Inc.: UA\nSan Luis Obispo, CA: San Luis County Regional\n82.87\n\n\nRepublic Airline: YX\nHouston, TX: George Bush Intercontinental/Houston\n93.20\n\n\nJetBlue Airways: B6\nKey West, FL: Key West International\n93.33\n\n\nEndeavor Air Inc.: 9E\nDallas/Fort Worth, TX: Dallas/Fort Worth International\n99.50\n\n\nPSA Airlines Inc.: OH\nMobile, AL: Mobile Regional\n137.04\n\n\nAllegiant Air: G4\nIdaho Falls, ID: Idaho Falls Regional\n157.00\n\n\nSkyWest Airlines Inc.: OO\nSarasota/Bradenton, FL: Sarasota/Bradenton International\n190.50\n\n\nAmerican Airlines Inc.: AA\nJackson, WY: Jackson Hole\n192.10"
+  },
+  {
+    "objectID": "conclusions.html",
+    "href": "conclusions.html",
+    "title": "Conclusions",
+    "section": "",
+    "text": "Hagerstown (HGR) had the highest average departure delay in Q4, at 107.38 minutes.\nSunday had the most non-cancelled flights, while Wednesday had the fewest. These are monthly totals.\nThere were 4,151 cancelled flights. Weather was the leading cancellation reason in all ten airport–reason results shown.\nDaily flight counts dropped on December 24–25 and increased again on December 26."
+  },
+  {
+    "objectID": "conclusions.html#main-findings",
+    "href": "conclusions.html#main-findings",
+    "title": "Conclusions",
+    "section": "",
+    "text": "Hagerstown (HGR) had the highest average departure delay in Q4, at 107.38 minutes.\nSunday had the most non-cancelled flights, while Wednesday had the fewest. These are monthly totals.\nThere were 4,151 cancelled flights. Weather was the leading cancellation reason in all ten airport–reason results shown.\nDaily flight counts dropped on December 24–25 and increased again on December 26."
+  },
+  {
+    "objectID": "conclusions.html#limitations",
+    "href": "conclusions.html#limitations",
+    "title": "Conclusions",
+    "section": "Limitations",
+    "text": "Limitations\nThese results cover only December 2024. Maximum delays describe extreme events, and airport averages should be considered alongside flight counts.\nThe import produced warnings. My SQL checks raised questions about zero departure delays among cancelled flights, but did not confirm whether missing values were converted to zeros."
+  },
+  {
+    "objectID": "conclusions.html#what-i-learned",
+    "href": "conclusions.html#what-i-learned",
+    "title": "Conclusions",
+    "section": "What I Learned",
+    "text": "What I Learned\nThis project gave me practice loading data into MySQL, joining lookup tables, and using grouping and window functions. I also used Python to turn my exported SQL results into charts for this Quarto report."
+  }
+]
